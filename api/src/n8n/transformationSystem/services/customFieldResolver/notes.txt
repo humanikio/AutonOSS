@@ -1,0 +1,8 @@
+questions 
+1. we use the most recent node
+2.there will be no fallback logic for find contact failure 
+3. i think node id is better for adapter naming 
+4. we need to fetch all possilbe fields from the contact api here backend/src/contacts/services/ManageContacts.ts other wise we will not be able to use the customfeilds that are created dynamically by users. p;lease advise me on how that changes the sucess reponse mapping systme in the frontend, I thnk sinec we are adding nomral options this is not a big deal at all since the frotnend can make thhe api call whne the node is placed to get all possilbe nomral custom fielsd then they are reoslved server side in terms of their nodeANme refernce and then at run time of the workflow these will be resovled in the repoinse anyways since they will be the same! 
+5. always hidden, our users dont need to know this 
+6. just use your weighting system there, nice simple, numerical 
+7. there really is no merging right now, if the contact is the same from the trigger, then it will be the same in find contact anyways, otherwise the find coanct will elad to infromatin that is not contact based anyways in the other path 

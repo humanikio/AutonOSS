@@ -1,0 +1,9 @@
+there is only one subscription per workflow so we dont need a index for workflowid only for triggerType and active or inactive 
+
+your alreadyd using the auth.eitehr which is good but make sure we follow the patterns to use the api scope for finding tenant id if needed, or using it when provided explxity alogn with a jwt for example or if the service is called we can pass tenantId, make sure it is required 
+
+for creating a workflow, triggerType is required so that we can query the index to find the record for schema, etc
+
+updates, dleetes need subscriptionId 
+
+get triggers simply jsut needs to accept filtering, require tenantId, use the same auth methods or dirrect call methods at the service level, auth at the route level or contorller 

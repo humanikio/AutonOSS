@@ -1,0 +1,85 @@
+rules_version = '2';
+
+// Firebase Storage Security Rules
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Allow authenticated users to access conversation media files for their tenant
+    match /conversations/{tenantId}/{contactId}/{conversationId}/messages/{messageId}/{fileName} {
+      allow read: if request.auth != null && (
+        // Allow if user is the tenant owner
+        request.auth.uid == tenantId ||
+        // Allow if user has access to this tenant (check user document)
+        (exists(/databases/(default)/documents/users/$(request.auth.uid)) &&
+         tenantId in get(/databases/(default)/documents/users/$(request.auth.uid)).data.accessibleTenants)
+      );
+      
+      // Only backend services can write/upload media files
+      allow write: if false;
+    }
+
+    // Allow authenticated users to access any tenant media they have access to
+    match /conversations/{tenantId}/{allPaths=**} {
+      allow read: if request.auth != null && (
+        // Allow if user is the tenant owner
+        request.auth.uid == tenantId ||
+        // Allow if user has access to this tenant
+        (exists(/databases/(default)/documents/users/$(request.auth.uid)) &&
+         tenantId in get(/databases/(default)/documents/users/$(request.auth.uid)).data.accessibleTenants)
+      );
+      
+      // Only backend services can write/upload media files
+      allow write: if false;
+    }
+
+    // Agent avatar images - allow read for authenticated users of the tenant
+    match /agents/{tenantId}/{agentId}/{fileName} {
+      allow read: if request.auth != null && (
+        request.auth.uid == tenantId ||
+        (exists(/databases/(default)/documents/users/$(request.auth.uid)) &&
+         tenantId in get(/databases/(default)/documents/users/$(request.auth.uid)).data.accessibleTenants)
+      );
+      
+      allow write: if request.auth != null && (
+        request.auth.uid == tenantId ||
+        (exists(/databases/(default)/documents/users/$(request.auth.uid)) &&
+         tenantId in get(/databases/(default)/documents/users/$(request.auth.uid)).data.accessibleTenants)
+      );
+    }
+
+    // Knowledge base file uploads
+    match /knowledge-base/{tenantId}/{docId}/{fileName} {
+      allow read, write: if request.auth != null && (
+        request.auth.uid == tenantId ||
+        (exists(/databases/(default)/documents/users/$(request.auth.uid)) &&
+         tenantId in get(/databases/(default)/documents/users/$(request.auth.uid)).data.accessibleTenants)
+      );
+    }
+
+    // Call recordings and audio files
+    match /call-recordings/{tenantId}/{contactId}/{recordingId}/{fileName} {
+      allow read: if request.auth != null && (
+        request.auth.uid == tenantId ||
+        (exists(/databases/(default)/documents/users/$(request.auth.uid)) &&
+         tenantId in get(/databases/(default)/documents/users/$(request.auth.uid)).data.accessibleTenants)
+      );
+
+      // Only backend can write call recordings
+      allow write: if false;
+    }
+
+    // Creative Studio Image Library - PUBLIC READ for email embedding
+    // These images are embedded in emails sent to customers, so they must be publicly accessible
+    match /tenants/{tenantId}/creativeStudio/imageLibrary/{imageFile} {
+      // Public read access - required for email clients to load images
+      allow read: if true;
+
+      // Only backend can write/delete images
+      allow write: if false;
+    }
+
+    // Default deny all other files
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

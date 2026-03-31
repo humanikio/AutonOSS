@@ -1,0 +1,8 @@
+n8n Version: 1.75.0
+Extracted Date: 2025-01-14
+Source: /Users/tylerthomlinson/Desktop/pulseline/n8n
+
+Notes:
+- Only extracted schemas for nodes we actively use in transformations
+- Versions locked to what we use in convertReactFlow2N8n.ts
+- Update this file when pulling new versions from n8n repo

@@ -1,0 +1,33 @@
+// Firebase Storage Security Rules
+// These rules should be applied in the Firebase Console under Storage > Rules
+
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Allow authenticated users to read/write their own avatar uploads
+    match /users/{userId}/avatar/{allPaths=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Allow public read access to generated avatar images (but not write)
+    match /users/{userId}/avatar/generatedImages/{allPaths=**} {
+      allow read; // Public read access for generated avatars
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Default rule - deny all other access
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
+// Instructions:
+// 1. Go to Firebase Console > Storage > Rules
+// 2. Replace the existing rules with the rules above
+// 3. Click "Publish" to apply the changes
+// 
+// This configuration:
+// - Allows users to upload/read their own avatar files
+// - Allows public read access to generated avatar images
+// - Maintains security for other files
