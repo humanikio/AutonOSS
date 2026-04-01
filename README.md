@@ -1,10 +1,10 @@
-# Auton
+# Auton — Open-Source GoHighLevel Alternative
 
-An AI CRM built for multi-tenancy and n8n integration for automations. Originally built in early 2025 as an internal tool at our company for managing AI-powered customer engagement across SMS, voice, and email.
+Self-host the full agency stack with AI agents built in. Multi-tenant CRM with AI-powered SMS, voice, and email — all in one repo.
 
-We used this with a handful of clients for a while, then moved on to a newer product. I went through it, stripped out the billing/payment stuff and some client-specific things, and figured I'd leave it here for anyone who wants to pick it up, repurpose it, or build something on top of it.
+Originally built in early 2025 as an internal tool for managing AI-powered customer engagement across channels. We used it with real clients, then moved on to a newer product. Stripped out the billing and client-specific stuff and open-sourced it for anyone who wants to pick it up, build on it, or run their own.
 
-**Fair warning** — this is not my greatest work. It was built fast for internal use and it shows in places. There are no tests, the logging is just console.log, and there's a bunch of TODOs scattered around. It'll need real cleanup before you'd want to run it in production or turn it into a proper product. But the bones are solid — the multi-tenant architecture works, the AI agent system works, the workflow builder works, and the Twilio/ElevenLabs integrations are functional. It has potential if someone wants to put the time in.
+**Fair warning** — this was built fast for internal use and it shows in places. No tests, console.log everywhere, TODOs scattered around. But the bones are solid — the multi-tenant architecture works, the AI agent system works, the workflow builder works, and the Twilio/ElevenLabs integrations are functional. It ran in production for real clients.
 
 ## What it does
 
@@ -157,7 +157,6 @@ Just being honest about the state of things:
 - **Console.log everywhere** — no structured logging
 - **No monitoring** — no error tracking, no metrics
 - **Input validation is minimal** — only on auth routes
-- **No Docker** — you'll want to containerize it
 - **Lots of TODOs** — some features are half-finished
 
 The architecture and core features work though. It ran in production for real clients.
