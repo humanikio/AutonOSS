@@ -26,7 +26,7 @@ const db = admin.firestore();
  * Usage: npx tsx scripts/migrateContactConversationIds.ts
  */
 
-const TENANT_ID = 'sub-89bb0d70-bcb0-42ea-8dad-7c80daa60e5d';
+const TENANT_ID = process.env.MIGRATION_TENANT_ID || 'your-tenant-id-here';
 
 interface ConversationDoc {
   id: string;
