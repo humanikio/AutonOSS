@@ -39,19 +39,50 @@ We used this with a handful of clients for a while, then moved on to a newer pro
 
 ### Prerequisites
 
-- Node.js >= 18
 - A Firebase project (Firestore + Auth enabled)
 - Twilio account (for SMS/voice)
 - At least one AI provider key (OpenAI, Anthropic, or Google)
 
-### 1. Clone the repo
+### Firebase Setup
+
+1. Create a project at [console.firebase.google.com](https://console.firebase.google.com)
+2. Enable Authentication (Email/Password + Google)
+3. Enable Cloud Firestore
+4. Generate a service account key for the backend `.env`
+5. Copy the web config to the frontend `.env.local`
+
+See `api/FIRESTORE_MANUAL_SETUP.md` for Firestore index setup.
+
+---
+
+### Option A: Docker (recommended)
 
 ```bash
-git clone https://github.com/your-org/auton.git
-cd auton
+git clone https://github.com/humanikio/AutonOSS.git
+cd AutonOSS
+cp .env.example .env
+# Fill in your credentials in .env
+docker compose up --build
 ```
 
-### 2. Backend
+- Frontend: `http://localhost:3000`
+- Backend: `http://localhost:8000`
+
+To also run n8n for workflow automation:
+
+```bash
+docker compose --profile n8n up --build
+```
+
+n8n will be at `http://localhost:5678` (default login: `admin` / `changeme` — change this).
+
+> **Note on Firebase private key:** In your `.env`, the `FIREBASE_PRIVATE_KEY` value must preserve literal `\n` characters. Paste it exactly as it appears in the downloaded JSON file, wrapped in double quotes.
+
+---
+
+### Option B: Run locally
+
+**Backend**
 
 ```bash
 cd api
@@ -63,7 +94,7 @@ npm run dev
 
 Runs on `http://localhost:8000`.
 
-### 3. Frontend
+**Frontend**
 
 ```bash
 cd web
@@ -74,16 +105,6 @@ npm run dev
 ```
 
 Runs on `http://localhost:3000`.
-
-### 4. Firebase Setup
-
-1. Create a project at [console.firebase.google.com](https://console.firebase.google.com)
-2. Enable Authentication (Email/Password + Google)
-3. Enable Cloud Firestore
-4. Generate a service account key for the backend `.env`
-5. Copy the web config to the frontend `.env.local`
-
-See `api/FIRESTORE_MANUAL_SETUP.md` for Firestore index setup.
 
 ## Services
 
